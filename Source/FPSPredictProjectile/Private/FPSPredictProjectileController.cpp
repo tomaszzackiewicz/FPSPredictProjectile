@@ -2,6 +2,7 @@
 
 
 #include "FPSPredictProjectileController.h"
+#include "Target.h"
 #include "DrawDebugHelpers.h"
 
 FVector AFPSPredictProjectileController::GetLookVectorHitLocation() const
@@ -22,10 +23,14 @@ FVector AFPSPredictProjectileController::GetLookVectorHitLocation() const
 	
 	FHitResult HitResult;
 	auto StartLocation = PlayerCameraManager->GetCameraLocation();
-	auto EndLocation = StartLocation + (LookDirection * 10000);
+	auto EndLocation = StartLocation + (LookDirection * 1000);
 	if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility)){
 		//DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor(255, 0, 0), false, 5, 0,12.333);
-		return HitResult.Location;
+		ATarget* Target = Cast<ATarget>(HitResult.Actor);
+		if (Target) {
+			return HitResult.Location;
+		}
+		return FVector(0);
 	}
 
 	return FVector(0);
