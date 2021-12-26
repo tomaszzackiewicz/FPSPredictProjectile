@@ -9,21 +9,21 @@ FVector AFPSPredictProjectileController::GetLookVectorHitLocation() const
 {
 	
 	// Find the crosshair position in pixel coordinates
-	int32 ViewportSizeX, ViewportSizeY;
-	GetViewportSize(ViewportSizeX, ViewportSizeY);
-	auto ScreenLocation = FVector2D(ViewportSizeX * CrosshairXLocation, ViewportSizeY * CrosshairYLocation);
+	//int32 ViewportSizeX, ViewportSizeY;
+	//GetViewportSize(ViewportSizeX, ViewportSizeY);
+	//auto ScreenLocation = FVector2D(ViewportSizeX * CrosshairXLocation, ViewportSizeY * CrosshairYLocation);
 
-	// "De-project" the screen position of the crosshair to a world direction
-	FVector LookDirection;
-	if (!GetLookDirection(ScreenLocation, LookDirection)) {
-		return FVector(0);
-	}
+	//// "De-project" the screen position of the crosshair to a world direction
+	//FVector LookDirection;
+	//if (!GetLookDirection(ScreenLocation, LookDirection)) {
+	//	return FVector(0);
+	//}
 
 	// Line-trace along that LookDirection, and see what we hit (up to max range)
 	
 	FHitResult HitResult;
 	auto StartLocation = PlayerCameraManager->GetCameraLocation();
-	auto EndLocation = StartLocation + (LookDirection * 1000);
+	auto EndLocation = StartLocation + (PlayerCameraManager->GetActorForwardVector() * 1000); //LookDirection
 	if (GetWorld()->LineTraceSingleByChannel(HitResult, StartLocation, EndLocation, ECollisionChannel::ECC_Visibility)){
 		//DrawDebugLine(GetWorld(), StartLocation, EndLocation, FColor(255, 0, 0), false, 5, 0,12.333);
 		ATarget* Target = Cast<ATarget>(HitResult.Actor);
